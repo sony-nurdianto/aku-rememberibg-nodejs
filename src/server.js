@@ -4,7 +4,9 @@ import cors from 'cors'
 import helmet from 'helmet'
 import morgan from 'morgan'
 import { db } from './config/database'
+import jwt from 'jsonwebtoken'
 import routes from './routes/auth'
+import memberRoute from './routes/member'
 require('dotenv').config()
 
 
@@ -31,10 +33,21 @@ app.use(bodyParser.json({ limit: '50mb' }))
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
 
 app.use('/', routes)
+app.use('/users', validateUser, memberRoute)
 app.get('/', (req, res, next) => {
     return res.status(404).json('not found')
 })
 
+function validateUser(req, res, next) {
+    jwt.verify(req.headers["token"], process.env.SECRET_KEY, (err, decoded) => {
+        if (err) {
+            res.json(err);
+        } else {
+            req.body.userId = decoded.id;
+            next();
+        }
+    });
+}
 
 db()
 const Port = process.env.PORT || 3000
