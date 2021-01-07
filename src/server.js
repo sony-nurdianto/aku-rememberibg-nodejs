@@ -13,6 +13,13 @@ require('dotenv').config()
 const app = express()
 
 app.use(cors())
+app.use(
+    cors({
+        origin: ["*"],
+        methods: ["GET", "HEAD", "POST", "DELETE", "PUT", "PATCH", "OPTIONS"],
+        credentials: false,
+    })
+);
 app.use(helmet())
 // app.use(compression())
 app.use(morgan('combined'))
