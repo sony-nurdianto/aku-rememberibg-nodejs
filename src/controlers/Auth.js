@@ -17,7 +17,7 @@ class AuthController {
                 const payload = {
                     member_email: check.member_email,
                     member_no: check.member_no,
-                    member_name: check.member_name
+                    member_name: check.member_name,
                 }
                 const token = await jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: '1d' })
                 return res.json({ status: true, message: 'OK', data: { ...payload, token } })
@@ -25,6 +25,23 @@ class AuthController {
             return res.status(400).json({ status: false, message: 'Email or Password Wrong!' })
         } catch (error) {
             console.log(error)
+            res.status(500).json({ status: false, message: 'Internal server error!' })
+        }
+    }
+
+
+    getUSer = async (req, res) => {
+        try {
+
+            const member = await MemberModel.find()
+            if (!member) {
+                return res.status(400).json({ status: false, message: "data not exist" })
+            }
+
+            return res.json({ status: true, data: member })
+
+        } catch (err) {
+            console.log(err)
             res.status(500).json({ status: false, message: 'Internal server error!' })
         }
     }
