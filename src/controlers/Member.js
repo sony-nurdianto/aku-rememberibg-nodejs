@@ -5,7 +5,7 @@ class Member {
 
     GetMemberbyEmail = async (req, res) => {
 
-        const email = req.params.email
+        const email = req.body.email
 
         try {
             console.log(email)

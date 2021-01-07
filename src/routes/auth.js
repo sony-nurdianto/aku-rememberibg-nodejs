@@ -7,7 +7,7 @@ const route = Router()
 
 route.route('/home').get(HomeController.index)
 route.route('/login').post(Auth.login)
-route.route('/users/:email').get(Member.GetMemberbyEmail)
+route.route('/users').get(Member.GetMemberbyEmail)
 
 
 
