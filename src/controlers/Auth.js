@@ -2,7 +2,50 @@ import MemberModel from "../models/member"
 import md5 from 'md5'
 import jwt from 'jsonwebtoken'
 
+
 class AuthController {
+
+
+    register = async (req, res) => {
+        const { email, password } = req.body
+
+        try {
+            const emailRegxp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            const check = emailRegxp.test(email)
+            if (email === "") {
+                return res.status(400).json({ status: false, message: "email required" })
+            }
+
+            if (!check) {
+                console.log(check)
+                return res.status(400).json({ status: false, message: "email invalid" })
+            }
+
+            const isEmailExist = await MemberModel.findOne({ email })
+
+            if (isEmailExist) {
+                return res.status(400).json({ status: false, message: "email is alredy exist" })
+            }
+
+
+            await MemberModel.create({
+                member_name: req.body.name,
+                member_email: req.body.email,
+                member_phone: req.body.phone,
+                member_no: req.body.no,
+                member_bdate: req.body.bdate,
+                member_password: md5(req.body.password)
+            }).then(result => {
+                return res.status(200).json(result)
+            }).catch(err => {
+                return res.status(400).json(err)
+            })
+
+
+        } catch (error) {
+            return res.status(400).json({ message: error })
+        }
+    }
 
     login = async (req, res) => {
         const { email, password } = req.body
