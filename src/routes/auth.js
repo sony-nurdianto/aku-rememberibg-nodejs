@@ -12,6 +12,8 @@ route.route('/all').get(Member.GetAllMemberData)
 route.route('/getuser').get(Member.GetMemberbyEmail)
 route.route('/update-user').put(Member.updateMemberData)
 route.route('/delete-user').delete(Member.deleteMember)
+route.route('/delete-param/:id').delete(Member.deleteMemberById)
+route.route('/update-param/:id').put(Member.updateMemberById)
 
 
 
