@@ -27,19 +27,32 @@ class AuthController {
                 return res.status(400).json({ status: false, message: "email is alredy exist" })
             }
 
-
-            await MemberModel.create({
+            const add = new MemberModel({
                 member_name: req.body.name,
                 member_email: req.body.email,
                 member_phone: req.body.phone,
                 member_no: req.body.no,
                 member_bdate: req.body.bdate,
                 member_password: md5(req.body.password)
-            }).then(result => {
-                return res.status(200).json(result)
-            }).catch(err => {
-                return res.status(400).json(err)
             })
+
+            add.save((err, result) => {
+                if (err) {
+                    console.log(err)
+                    return res.status(400).json({ message: err })
+                }
+                console.log(result)
+                return res.status(200).json({ status: true, data: result })
+            })
+
+            // await MemberModel.create({
+            //     member_name: req.body.name,
+            //     member_email: req.body.email,
+            //     member_phone: req.body.phone,
+            //     member_no: req.body.no,
+            //     member_bdate: req.body.bdate,
+            //     member_password: md5(req.body.password)
+            // })
 
 
         } catch (error) {
@@ -58,6 +71,7 @@ class AuthController {
             })
             if (check) {
                 const payload = {
+                    id: check._id,
                     member_email: check.member_email,
                     member_no: check.member_no,
                     member_name: check.member_name,

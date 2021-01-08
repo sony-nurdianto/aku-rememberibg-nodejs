@@ -3,6 +3,7 @@ import Validator from "./../service/validator"
 import validator from "./../service/validator"
 
 
+
 class Member {
 
 
@@ -186,16 +187,29 @@ class Member {
 
     GetAllMemberData = async (req, res) => {
         const data = []
+        const dataToken = req.locals
+        const { pagination, limit } = req.query
+
         try {
 
-            const UserData = await MemberModel.find()
+            const pg = parseInt(pagination)
+            const lm = parseInt(limit)
+
+            const opt = {
+                page: pg,
+                limit: lm
+            }
+
+            const UserData = await MemberModel.paginate({}, opt)
+
+            console.log(UserData)
 
             if (!UserData) {
                 return res.status(400).json({ message: "data not found" })
             }
 
-            UserData.map(result => {
-                console.log(result._id)
+            UserData.docs.map(result => {
+
                 const payload = {
                     id: result._id,
                     member_email: result.member_email,
@@ -207,7 +221,7 @@ class Member {
                 data.push(payload)
             })
 
-            return res.status(200).json({ status: true, data: data })
+            return res.status(200).json({ status: true, dataToken, data: data })
         } catch (error) {
             return res.status(500).json({ message: "internal server error" })
         }
