@@ -7,24 +7,34 @@ class AuthController {
 
 
     register = async (req, res) => {
-        const { email, password } = req.body
+        const { email, password, name, phone, no, bdate } = req.body
 
         try {
             const emailRegxp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             const check = emailRegxp.test(email)
+
+            const dataPayload = {
+                email: email,
+                password: password,
+                name: name,
+                phone: phone,
+                no: no,
+                bdate: bdate
+            }
+
             if (email === "") {
-                return res.status(400).json({ status: false, message: "email required" })
+                return res.status(400).json({ status: false, message: "email required", data: dataPayload })
             }
 
             if (!check) {
                 console.log(check)
-                return res.status(400).json({ status: false, message: "email invalid" })
+                return res.status(400).json({ status: false, message: "email invalid", data: dataPayload })
             }
 
             const isEmailExist = await MemberModel.findOne({ email })
 
             if (isEmailExist) {
-                return res.status(400).json({ status: false, message: "email is alredy exist" })
+                return res.status(400).json({ status: false, message: "email is alredy exist", data: dataPayload })
             }
 
             const add = new MemberModel({

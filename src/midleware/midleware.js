@@ -3,25 +3,18 @@ import Member from "../models/member"
 class Middleware {
 
 
+    verify = async (req, res, next) => {
+        console.log(req.headers.authorization)
+
+    }
+
+
     validateUser = async (req, res, next) => {
         try {
             const decode = await jwt.verify(req.headers["token"], process.env.SECRET_KEY)
             if (!decode) {
                 return res.status(400).json({ message: "acess deniend" })
             }
-
-            // const isMember = await Member.findById(decode.id)
-
-            // const check = decode.id == isMember._id
-
-
-            // console.log(decode.id, isMember._id)
-
-            // if (!check) {
-            //     return res.status(400).json({ message: "acess deniend 2" })
-            // }
-
-
 
             req.locals = decode
 

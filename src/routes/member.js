@@ -6,8 +6,8 @@ const route = Router()
 
 route.route('').get(Member.GetMemberbyEmail)
 route.route('/members').get(midleware.validateUser, Member.GetAllMemberData)
-route.route('/getmember').get(Member.GetMemberbyEmail)
-route.route('/update').put(Member.updateMemberData)
-route.route('/delete').delete(Member.deleteMember)
+route.route('/getmember').get(midleware.validateUser, Member.GetMemberbyEmail)
+route.route('/update').put(midleware.validateUser, Member.updateMemberData)
+route.route('/delete').delete(midleware.validateUser, Member.deleteMember)
 
 export default route
