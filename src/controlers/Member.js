@@ -19,7 +19,7 @@ class Member {
                 return res.status(400).json({ message: "email in valid" })
             }
 
-            const removeMember = await MemberModel.findOneAndRemove({ email })
+            const removeMember = await MemberModel.findOneAndRemove({ member_email: email })
 
             if (!removeMember) {
                 return res.status(400).json({ message: "email not found" })
@@ -43,6 +43,8 @@ class Member {
 
         try {
 
+            console.log(email)
+
             if (email === "") {
                 return res.status(400).json({ message: "email required" })
             }
@@ -53,7 +55,7 @@ class Member {
                 return res.status(400).json({ message: "email is invalid" })
             }
 
-            const oldData = await MemberModel.findOne({ email })
+            const oldData = await MemberModel.findOne({ member_email: email })
 
             if (!oldData) {
                 return res.status(400).json({ message: "data not found" })
@@ -67,7 +69,11 @@ class Member {
             }
 
 
-            const Update = await MemberModel.findOneAndUpdate({ email }, updateData)
+            const Update = await MemberModel.findOneAndUpdate({ member_email: email }, updateData)
+
+            if (!Update) {
+                return res.status(400).json({ message: "data not found" })
+            }
 
             const payload = {
                 member_name: Update.member_name,
@@ -77,7 +83,7 @@ class Member {
 
             return res.status(200).json({ status: 200, data: payload })
         } catch (error) {
-            return res.status(500).json(error)
+            return res.status(500).json({ message: "internal server error" })
         }
     }
 
