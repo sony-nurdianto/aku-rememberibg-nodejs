@@ -193,7 +193,7 @@ class Member {
         try {
 
             if (!pagination && !limit) {
-                pagination = 5
+                pagination = 0
                 limit = 5
             }
 
