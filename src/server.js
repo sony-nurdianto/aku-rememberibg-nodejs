@@ -4,10 +4,10 @@ import cors from 'cors'
 import helmet from 'helmet'
 import morgan from 'morgan'
 import { db } from './config/database'
-import jwt from 'jsonwebtoken'
 import routes from './routes/auth'
 import memberRoute from './routes/member'
-import midleware from './midleware/midleware'
+import jwt from "jsonwebtoken"
+import transactionRoute from './routes/transaction'
 require('dotenv').config()
 
 
@@ -35,6 +35,7 @@ app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
 
 app.use('/', routes)
 app.use('/users', memberRoute)
+app.use('/transaction', transactionRoute)
 app.get('/', (req, res, next) => {
     return res.status(404).json('not found')
 })

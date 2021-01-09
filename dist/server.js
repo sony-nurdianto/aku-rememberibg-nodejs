@@ -10,6 +10,7 @@ var helmet_1 = __importDefault(require("helmet"));
 var morgan_1 = __importDefault(require("morgan"));
 var database_1 = require("./config/database");
 var auth_1 = __importDefault(require("./routes/auth"));
+var member_1 = __importDefault(require("./routes/member"));
 require('dotenv').config();
 var app = express_1.default();
 app.use(cors_1.default());
@@ -28,6 +29,8 @@ morgan_1.default.token('date', function () {
 app.use(body_parser_1.default.json({ limit: '50mb' }));
 app.use(body_parser_1.default.urlencoded({ limit: '50mb', extended: true }));
 app.use('/', auth_1.default);
+app.use('/users', member_1.default);
+// app.use('/transaction', transactionRoute)
 app.get('/', function (req, res, next) {
     return res.status(404).json('not found');
 });

@@ -192,6 +192,11 @@ class Member {
 
         try {
 
+            if (!pagination && !limit) {
+                pagination = 5
+                limit = 5
+            }
+
             const pg = parseInt(pagination)
             const lm = parseInt(limit)
 
@@ -223,7 +228,7 @@ class Member {
             return res.status(200).json({ status: true, data: data })
             // return res.status(200).json({ status: true, dataToken, data: data })
         } catch (error) {
-            return res.status(500).json({ message: "internal server error" })
+            return res.status(500).json({ message: "internal server error", error: error })
         }
     }
 

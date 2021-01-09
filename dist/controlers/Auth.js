@@ -56,8 +56,64 @@ var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var AuthController = /** @class */ (function () {
     function AuthController() {
         var _this = this;
+        this.register = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            var _a, email, password, name, phone, no, bdate, emailRegxp, check, dataPayload, isEmailExist, add, error_1;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = req.body, email = _a.email, password = _a.password, name = _a.name, phone = _a.phone, no = _a.no, bdate = _a.bdate;
+                        _b.label = 1;
+                    case 1:
+                        _b.trys.push([1, 3, , 4]);
+                        emailRegxp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                        check = emailRegxp.test(email);
+                        dataPayload = {
+                            email: email,
+                            password: password,
+                            name: name,
+                            phone: phone,
+                            no: no,
+                            bdate: bdate
+                        };
+                        if (email === "") {
+                            return [2 /*return*/, res.status(400).json({ status: false, message: "email required", data: dataPayload })];
+                        }
+                        if (!check) {
+                            console.log(check);
+                            return [2 /*return*/, res.status(400).json({ status: false, message: "email invalid", data: dataPayload })];
+                        }
+                        return [4 /*yield*/, member_1.default.findOne({ email: email })];
+                    case 2:
+                        isEmailExist = _b.sent();
+                        if (isEmailExist) {
+                            return [2 /*return*/, res.status(400).json({ status: false, message: "email is alredy exist", data: dataPayload })];
+                        }
+                        add = new member_1.default({
+                            member_name: req.body.name,
+                            member_email: req.body.email,
+                            member_phone: req.body.phone,
+                            member_no: req.body.no,
+                            member_bdate: req.body.bdate,
+                            member_password: md5_1.default(req.body.password)
+                        });
+                        add.save(function (err, result) {
+                            if (err) {
+                                console.log(err);
+                                return res.status(400).json({ message: err });
+                            }
+                            console.log(result);
+                            return res.status(200).json({ status: true, data: result });
+                        });
+                        return [3 /*break*/, 4];
+                    case 3:
+                        error_1 = _b.sent();
+                        return [2 /*return*/, res.status(400).json({ message: error_1 })];
+                    case 4: return [2 /*return*/];
+                }
+            });
+        }); };
         this.login = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var _a, email, password, check, payload, token, error_1;
+            var _a, email, password, check, payload, token, error_2;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -77,9 +133,10 @@ var AuthController = /** @class */ (function () {
                         check = _b.sent();
                         if (!check) return [3 /*break*/, 4];
                         payload = {
+                            id: check._id,
                             member_email: check.member_email,
                             member_no: check.member_no,
-                            member_name: check.member_name
+                            member_name: check.member_name,
                         };
                         return [4 /*yield*/, jsonwebtoken_1.default.sign(payload, process.env.SECRET_KEY, { expiresIn: '1d' })];
                     case 3:
@@ -87,11 +144,33 @@ var AuthController = /** @class */ (function () {
                         return [2 /*return*/, res.json({ status: true, message: 'OK', data: __assign(__assign({}, payload), { token: token }) })];
                     case 4: return [2 /*return*/, res.status(400).json({ status: false, message: 'Email or Password Wrong!' })];
                     case 5:
-                        error_1 = _b.sent();
-                        console.log(error_1);
+                        error_2 = _b.sent();
+                        console.log(error_2);
                         res.status(500).json({ status: false, message: 'Internal server error!' });
                         return [3 /*break*/, 6];
                     case 6: return [2 /*return*/];
+                }
+            });
+        }); };
+        this.getUSer = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            var member, err_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, member_1.default.find()];
+                    case 1:
+                        member = _a.sent();
+                        if (!member) {
+                            return [2 /*return*/, res.status(400).json({ status: false, message: "data not exist" })];
+                        }
+                        return [2 /*return*/, res.json({ status: true, data: member })];
+                    case 2:
+                        err_1 = _a.sent();
+                        console.log(err_1);
+                        res.status(500).json({ status: false, message: 'Internal server error!' });
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
                 }
             });
         }); };

@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose_1 = __importDefault(require("mongoose"));
+var mongoose_paginate_v2_1 = __importDefault(require("mongoose-paginate-v2"));
 var schema = mongoose_1.default.Schema({
     member_no: {
         type: String,
@@ -188,4 +189,5 @@ var schema = mongoose_1.default.Schema({
         default: null
     },
 }, { timestamps: true });
+schema.plugin(mongoose_paginate_v2_1.default);
 exports.default = mongoose_1.default.model('member', schema);

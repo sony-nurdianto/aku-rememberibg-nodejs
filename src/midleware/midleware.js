@@ -1,17 +1,21 @@
 import jwt from 'jsonwebtoken'
-import Member from "../models/member"
+
 class Middleware {
 
 
-    verify = async (req, res, next) => {
-        console.log(req.headers.authorization)
+    // verify = async (req, res, next) => {
+    //     console.log(req.headers.authorization)
 
-    }
+    // }
 
 
     validateUser = async (req, res, next) => {
+
+        console.log(req.headers)
+
         try {
             const decode = await jwt.verify(req.headers["token"], process.env.SECRET_KEY)
+            console.log(decode)
             if (!decode) {
                 return res.status(400).json({ message: "acess deniend" })
             }
@@ -19,25 +23,12 @@ class Middleware {
             req.locals = decode
 
             next()
-
-
         } catch (error) {
-            return res.status(400).json({ message: 'internal server error' })
+            return res.status(400).json({ message: 'internal server error', error: error })
         }
     }
 
 
-    // validateUser = (req, res, next) => {
-    //     console.log(req.headers["token"])
-    //     jwt.verify(req.headers["token"], process.env.SECRET_KEY, (err, decoded) => {
-    //         if (err) {
-    //             res.json(err);
-    //         } else {
-    //             const authToken = decoded
-    //             next();
-    //         }
-    //     });
-    // }
 
 }
 
