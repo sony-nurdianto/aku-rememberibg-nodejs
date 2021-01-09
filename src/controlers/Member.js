@@ -187,18 +187,12 @@ class Member {
 
     GetAllMemberData = async (req, res) => {
         const data = []
-        // const dataToken = req.locals
         const { pagination, limit } = req.query
 
         try {
 
-            if (!pagination && !limit) {
-                pagination = 0
-                limit = 5
-            }
-
-            const pg = parseInt(pagination)
-            const lm = parseInt(limit)
+            const pg = parseInt(pagination) || 1
+            const lm = parseInt(limit) || 10
 
             const opt = {
                 page: pg,
@@ -228,6 +222,7 @@ class Member {
             return res.status(200).json({ status: true, data: data })
             // return res.status(200).json({ status: true, dataToken, data: data })
         } catch (error) {
+            console.log("error controllers")
             return res.status(500).json({ message: "internal server error", error: error })
         }
     }
