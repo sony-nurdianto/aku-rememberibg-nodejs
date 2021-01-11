@@ -34,7 +34,7 @@ class TransactionControler {
             if (!memberData) {
                 return res.status(400).json({ status: false, message: "transaction data not found" })
             }
-            const transactionData = await Transaction.findOne({ member_no: memberData.member_no }).populate('transactions')
+            const transactionData = await Transaction.findOne({ member_no: memberData.member_no })
             console.log(transactionData)
             if (!transactionData) {
                 return res.status(200).json({ status: true, message: "there are no transaction yet", data: memberData })
