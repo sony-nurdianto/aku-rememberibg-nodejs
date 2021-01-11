@@ -34,22 +34,14 @@ class TransactionControler {
             if (!memberData) {
                 return res.status(400).json({ status: false, message: "transaction data not found" })
             }
-            const transactionData = await Transaction.findOne({ member_no: memberData.member_no })
-            console.log(transactionData)
+            const transactionData = await Transaction.findOne({ member_no: memberData.member_no }).populate('details')
+
             if (!transactionData) {
-                return res.status(200).json({ status: true, message: "there are no transaction yet", data: memberData })
+                return res.status(200).json({ status: true, message: "there are no transaction yet" })
             }
 
-            const transactionDetail = await TransactionDetailModel.findOne({ order_id: transactionData.order_id })
-            if (!transactionDetail) {
-                return res.status(200).json({ status: true, message: "there are still no transactions as well as transaction details", data: memberData })
-            }
+            return res.status(200).json({ status: true, data: transactionData.toJSON({ virtuals: true }) })
 
-            const payload = []
-
-            payload.push(memberData, transactionData, transactionDetail)
-
-            return res.status(200).json({ status: true, data: payload })
         } catch (error) {
             return res.status(500).json(error)
         }

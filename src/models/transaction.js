@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import transactionDetails from "./transaction-details";
 
 
 const transactionsSchema = mongoose.Schema(
@@ -53,12 +54,6 @@ const transactionsSchema = mongoose.Schema(
                 type: String
             }
         },
-        transactionDetails: [
-            {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'transactions'
-            }
-        ],
         no_va: {
             type: String
         },
@@ -68,8 +63,19 @@ const transactionsSchema = mongoose.Schema(
     },
     {
         timestamps: true
+    },
+    {
+        toObject: { virtuals: true }
+    },
+    {
+        toJSON: { virtuals: true }
     }
 );
 
+transactionsSchema.virtual('details', {
+    ref: 'transaction_details',
+    localField: '_id',
+    foreignField: 'transId'
+})
 
 export default mongoose.model('transactions', transactionsSchema)
