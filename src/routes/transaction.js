@@ -4,6 +4,7 @@ import midleware from '../midleware/midleware'
 
 const route = Router()
 
+route.route('').get(midleware.validateUser, Transaction.GetMemberTransaction)
 route.route('/member-transaction-no').get(midleware.validateUser, Transaction.GetMemberByNumberNo)
 
 

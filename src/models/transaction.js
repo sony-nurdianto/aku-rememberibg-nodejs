@@ -53,6 +53,12 @@ const transactionsSchema = mongoose.Schema(
                 type: String
             }
         },
+        transactionDetails: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'transactions'
+            }
+        ],
         no_va: {
             type: String
         },

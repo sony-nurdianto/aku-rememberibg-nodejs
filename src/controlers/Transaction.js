@@ -1,27 +1,55 @@
 import TransactionModel from "../models/member";
+import Transaction from "../models/transaction";
+import TransactionDetailModel from "../models/transaction-details"
+import transactionDetails from "../models/transaction-details";
 // import MemberModel from "../models/member";5870002744
 
 
 class TransactionControler {
 
+    GetMemberTransaction = async (req, res) => {
+        const memberId = req.locals.id
+        try {
+
+            // "5e79bd501a160c1ee89c9dc8" 
+
+            const TransactionDetail = await TransactionDetailModel.findOne({ memberId: "5e79bd501a160c1ee89c9dc8" }).populate('transId').populate('memberId')
+            if (!TransactionDetail) {
+                return res.status(400).json({ status: false, message: "data not found" })
+            }
+
+            return res.status(400).json({ status: true, data: TransactionDetail })
+
+        } catch (error) {
+            return res.status(500).json(error)
+        }
+    }
+
     GetMemberByNumberNo = async (req, res) => {
-        const memberNo = req.locals.member_no || 5870002744
+        const memberNo = req.locals.member_no
 
         try {
-            const transactionData = await TransactionModel.findOne({ member_no: memberNo })
-            if (!transactionData) {
+            // 5870002744
+            const memberData = await TransactionModel.findOne({ member_no: memberNo })
+            if (!memberData) {
                 return res.status(400).json({ status: false, message: "transaction data not found" })
             }
-
-            const payload = {
-                id: transactionData._id,
-                member_email: transactionData.member_email,
-                member_name: transactionData.member_name,
-                member_photo: transactionData.member_photo,
-                member_phone: transactionData.member_phone
+            const transactionData = await Transaction.findOne({ member_no: memberData.member_no }).populate('transactions')
+            console.log(transactionData)
+            if (!transactionData) {
+                return res.status(200).json({ status: true, message: "there are no transaction yet", data: memberData })
             }
 
-            return res.status(200).json({ status: 200, data: payload })
+            const transactionDetail = await TransactionDetailModel.findOne({ order_id: transactionData.order_id })
+            if (!transactionDetail) {
+                return res.status(200).json({ status: true, message: "there are still no transactions as well as transaction details", data: memberData })
+            }
+
+            const payload = []
+
+            payload.push(memberData, transactionData, transactionDetail)
+
+            return res.status(200).json({ status: true, data: payload })
         } catch (error) {
             return res.status(500).json(error)
         }
