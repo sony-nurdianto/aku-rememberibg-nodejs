@@ -6,6 +6,18 @@ import upload from "./../service/upload"
 
 class Member {
 
+    findByParams = async (req, res) => {
+
+        const member_name = new RegExp(req.query["member_name"], "i")
+        console.log(member_name)
+        try {
+            const searchValue = await MemberModel.find({ member_name })
+            console.log(searchValue)
+        } catch (error) {
+            return res.status(500).json({ message: error })
+        }
+    }
+
 
     deleteMemberById = async (req, res) => {
 
@@ -59,7 +71,7 @@ class Member {
             const photo = upload.photoUpload(isMemeber.member_no, isMemeber._id, dataUpdate.member_photo)
 
             dataUpdate.member_photo = photo
-            console.log(dataUpdate)
+
             const Update = await MemberModel.findByIdAndUpdate(userId, dataUpdate)
 
 
