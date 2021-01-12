@@ -56,8 +56,10 @@ class Member {
                 member_photo: req.body.photo ? req.body.photo : isMemeber.member_photo
             }
 
+            const photo = upload.photoUpload(isMemeber.member_no, isMemeber._id, dataUpdate.member_photo)
 
-            upload.photoUpload(isMemeber.member_no, isMemeber._id, dataUpdate.member_photo)
+            dataUpdate.member_photo = photo
+            console.log(dataUpdate)
             const Update = await MemberModel.findByIdAndUpdate(userId, dataUpdate)
 
 

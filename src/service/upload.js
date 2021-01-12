@@ -7,7 +7,8 @@ class Upload {
         const buff = new Buffer(photo, 'base64');
         try {
 
-            return fs.writeFileSync(`src/assets/member_images/${no}_${id}.png`, buff);
+            fs.writeFileSync(`src/assets/member_images/${no}_${id}.png`, buff);
+            return `${no}_${id}.png`
         } catch (error) {
             console, log(error)
         }
