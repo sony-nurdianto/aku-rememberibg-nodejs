@@ -1,13 +1,14 @@
 import MemberModel from "../models/member"
 import md5 from 'md5'
 import jwt from 'jsonwebtoken'
+import upload from '../service/upload'
 
 
 class AuthController {
 
 
     register = async (req, res) => {
-        const { email, password, name, phone, no, bdate } = req.body
+        const { email, password, name, phone, no, bdate, photo } = req.body
 
         try {
             const emailRegxp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -18,6 +19,7 @@ class AuthController {
                 password: password,
                 name: name,
                 phone: phone,
+                photo: photo,
                 no: no,
                 bdate: bdate
             }
@@ -41,10 +43,13 @@ class AuthController {
                 member_name: req.body.name,
                 member_email: req.body.email,
                 member_phone: req.body.phone,
+                member_photo: req.body.photo,
                 member_no: req.body.no,
                 member_bdate: req.body.bdate,
                 member_password: md5(req.body.password)
             })
+
+            upload.photoUpload(req.body.name, req.body.photo)
 
             add.save((err, result) => {
                 if (err) {

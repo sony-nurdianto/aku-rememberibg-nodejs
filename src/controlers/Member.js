@@ -1,7 +1,8 @@
 import MemberModel from "../models/member"
 import Validator from "./../service/validator"
 import validator from "./../service/validator"
-
+import fs from "fs"
+import upload from "./../service/upload"
 
 class Member {
 
@@ -38,6 +39,7 @@ class Member {
 
     updateMemberById = async (req, res) => {
         const userId = req.params.id
+
         try {
 
             const isMemeber = await MemberModel.findById(userId)
@@ -46,21 +48,25 @@ class Member {
                 return res.status(400).json({ message: "id is not exist" })
             }
 
-            const photob64 = req.body.photo
 
             const dataUpdate = {
                 member_name: req.body.name ? req.body.name : isMemeber.member_name,
                 member_email: req.body.email ? req.body.email : isMemeber.member_email,
                 member_phone: req.body.phone ? req.body.phone : isMemeber.member_phone,
-                member_photo: req.body.photo ? Buffer.toString(req.body.photo) : isMemeber.member_photo
+                member_photo: req.body.photo ? req.body.photo : isMemeber.member_photo
             }
 
+
+            upload.photoUpload(isMemeber.member_no, isMemeber._id, dataUpdate.member_photo)
             const Update = await MemberModel.findByIdAndUpdate(userId, dataUpdate)
+
+
 
             const payload = {
                 member_name: Update.member_name,
                 member_email: Update.member_email,
-                member_phone: Update.member_phone
+                member_phone: Update.member_phone,
+                // member_photo: Update.member_photo
             }
 
             if (!Update) {
