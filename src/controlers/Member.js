@@ -7,12 +7,15 @@ import upload from "./../service/upload"
 class Member {
 
     findByParams = async (req, res) => {
-
-        const member_name = new RegExp(req.query["member_name"], "i")
-        console.log(member_name)
+        const searchKey = req.query.search
+        // const member_name = new RegExp(req.query["member_name"], "i")
+        // console.log(member_name)
         try {
-            const searchValue = await MemberModel.find({ member_name })
-            console.log(searchValue)
+            const searchValue = await MemberModel.find({ $text: { $search: searchKey } })
+            if (!searchValue) {
+                return res.status(400).json({ status: false, message: "data not found" })
+            }
+            return res.status(200).json({ status: 200, data: searchValue })
         } catch (error) {
             return res.status(500).json({ message: error })
         }

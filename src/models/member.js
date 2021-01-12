@@ -189,5 +189,6 @@ const schema = mongoose.Schema({
 
 
 schema.plugin(mongoosePaginate)
+schema.index({ '$**': 'text' })
 
 export default mongoose.model('member', schema)
