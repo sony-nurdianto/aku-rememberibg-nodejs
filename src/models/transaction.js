@@ -76,6 +76,13 @@ transactionsSchema.virtual('details', {
     ref: 'transaction_details',
     localField: '_id',
     foreignField: 'transId'
-})
+});
+
+
+transactionsSchema.virtual('memberDetails', {
+    ref: 'member',
+    localField: 'member_no',
+    foreignField: 'member_no'
+});
 
 export default mongoose.model('transactions', transactionsSchema)
