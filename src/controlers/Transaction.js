@@ -1,7 +1,7 @@
-import TransactionModel from "../models/member";
+// import TransactionModel from "../models/member";
 import Transaction from "../models/transaction";
 import TransactionDetailModel from "../models/transaction-details"
-import transactionDetails from "../models/transaction-details";
+// import transactionDetails from "../models/transaction-details";
 // import MemberModel from "../models/member";5870002744
 
 

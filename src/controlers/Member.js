@@ -3,14 +3,12 @@ import Validator from "./../service/validator"
 import validator from "./../service/validator"
 
 
-
 class Member {
 
 
     deleteMemberById = async (req, res) => {
 
         const userId = req.params.id
-
         try {
 
             const isMember = await MemberModel.findById(userId)
@@ -48,10 +46,13 @@ class Member {
                 return res.status(400).json({ message: "id is not exist" })
             }
 
+            const photob64 = req.body.photo
+
             const dataUpdate = {
                 member_name: req.body.name ? req.body.name : isMemeber.member_name,
                 member_email: req.body.email ? req.body.email : isMemeber.member_email,
-                member_phone: req.body.phone ? req.body.phone : isMemeber.member_phone
+                member_phone: req.body.phone ? req.body.phone : isMemeber.member_phone,
+                member_photo: req.body.photo ? Buffer.toString(req.body.photo) : isMemeber.member_photo
             }
 
             const Update = await MemberModel.findByIdAndUpdate(userId, dataUpdate)
@@ -196,7 +197,7 @@ class Member {
                 if (!UserData) {
                     return res.status(400).json({ status: false, message: "data not found" })
                 }
-                return res.status(200).json({ status: true, data: UserData })
+                return res.status(200).json({ status: true, totalData: UserData.length, data: UserData })
             }
 
             const pg = parseInt(pagination)
