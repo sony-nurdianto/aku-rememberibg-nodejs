@@ -9,6 +9,8 @@ const config = {
     dbName: process.env.DB_NAME,
 }
 
+console.log(config)
+
 const MODE = process.env.NODE_ENV || 'development'
 export const db = () => {
     mongoose.Promise = global.Promise

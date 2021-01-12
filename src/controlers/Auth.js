@@ -72,6 +72,8 @@ class AuthController {
 
     login = async (req, res) => {
         const { email, password } = req.body
+        console.log(email, password)
+        console.log(process.env.SECRET_KEY)
         try {
             if (!email) return res.status(401).json({ status: false, message: 'Email required!' })
             if (!password) return res.status(401).json({ status: false, message: 'Password required!' })
@@ -79,6 +81,7 @@ class AuthController {
                 member_email: email,
                 member_password: md5(password)
             })
+            console.log(check)
             if (check) {
                 const payload = {
                     id: check._id,
@@ -86,6 +89,7 @@ class AuthController {
                     member_no: check.member_no,
                     member_name: check.member_name,
                 }
+
                 const token = await jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: '1d' })
                 return res.json({ status: true, message: 'OK', data: { ...payload, token } })
             }

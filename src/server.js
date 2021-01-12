@@ -6,7 +6,6 @@ import morgan from 'morgan'
 import { db } from './config/database'
 import routes from './routes/auth'
 import memberRoute from './routes/member'
-import jwt from "jsonwebtoken"
 import transactionRoute from './routes/transaction'
 require('dotenv').config()
 
