@@ -228,7 +228,7 @@ class Member {
 
                 data.push(payload)
             })
-            return res.status(200).json({ status: true, data: data })
+            return res.status(200).json({ status: true, totalData: UserData.totalDocs, data: data })
             // return res.status(200).json({ status: true, dataToken, data: data })
         } catch (error) {
             console.log("error controllers")
