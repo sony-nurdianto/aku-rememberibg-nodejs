@@ -191,8 +191,16 @@ class Member {
 
         try {
 
-            const pg = parseInt(pagination) || 1
-            const lm = parseInt(limit) || 10
+            if (!pagination && !limit) {
+                const UserData = await MemberModel.find()
+                if (!UserData) {
+                    return res.status(400).json({ status: false, message: "data not found" })
+                }
+                return res.status(200).json({ status: true, data: UserData })
+            }
+
+            const pg = parseInt(pagination)
+            const lm = parseInt(limit)
 
             const opt = {
                 page: pg,
