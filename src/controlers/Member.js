@@ -71,6 +71,8 @@ class Member {
                 member_photo: req.body.photo ? req.body.photo : isMemeber.member_photo
             }
 
+
+
             const photo = upload.photoUpload(isMemeber.member_no, isMemeber._id, dataUpdate.member_photo)
 
             dataUpdate.member_photo = photo
@@ -83,7 +85,7 @@ class Member {
                 member_name: Update.member_name,
                 member_email: Update.member_email,
                 member_phone: Update.member_phone,
-                // member_photo: Update.member_photo
+                member_photo: Update.member_photo
             }
 
             if (!Update) {
