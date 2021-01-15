@@ -7,6 +7,7 @@ import { db } from './config/database'
 import routes from './routes/auth'
 import memberRoute from './routes/member'
 import transactionRoute from './routes/transaction'
+import path from 'path'
 require('dotenv').config()
 
 
@@ -31,6 +32,8 @@ morgan.token('date', function () {
 })
 app.use(bodyParser.json({ limit: '50mb' }))
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
+app.use(express.static(path.join(__dirname, 'assets')))
+
 
 app.use('/', routes)
 app.use('/users', memberRoute)
