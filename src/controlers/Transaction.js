@@ -20,14 +20,16 @@ class TransactionControler {
                     }
                 },
                 {
-                    $group: {
-                        _id: "$payment_type",
-                        TotalTransactionVitual: {
-                            $sum: "$grand_total"
-                        }
+                    $lookup: {
+                        from: 'members',
+                        localField: 'memberId',
+                        foreignField: '_id',
+                        as: "member_data"
                     }
+                },
+                {
+                    $unwind: "$member_data"
                 }
-
             ])
             return res.status(200).json({ status: true, data: memberTransaction })
         } catch (error) {
