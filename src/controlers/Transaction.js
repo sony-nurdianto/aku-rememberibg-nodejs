@@ -6,23 +6,22 @@ import TransactionDetailModel from "../models/transaction-details"
 class TransactionControler {
 
 
-    GetTotalTransactionByDate = async (req, res) {
-        const { pStartDate, pEndDate } = req.query;
-        let startDate = JSON.parse(pStartDate);
-        let enDate = JSON.parse(pEndDate);
+    GetTotalTransactionByDate = async (req, res) => {
+        const { startDate, endDate } = req.query;
+
         try {
             const totalTransaction = await Transaction.aggregate([
                 {
                     $match: {
                         createdAt: {
-                            $gte: new Date("2020-04-22 11:04:42.711Z"),
-                            $lte: new Date("2021-01-04 11:04:42.711Z")
+                            $gte: new Date(startDate),
+                            $lte: new Date(endDate)
                         }
-                    },
+                    }
+                },
+                {
                     $group: {
-                        _id: {
-                            payment_type: "virtual_account"
-                        },
+                        _id: "$payment_type",
                         TotalTransactionVitual: {
                             $sum: "$grand_total"
                         }
@@ -30,7 +29,7 @@ class TransactionControler {
                 }
             ])
 
-            console.log(totalTransaction)
+            return res.status(200).json({ status: true, data: totalTransaction })
         } catch (error) {
             if (error) {
                 return res.status(400).json({ message: "internal Server Error" })
