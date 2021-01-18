@@ -235,7 +235,7 @@ class Member {
 
             const UserData = await MemberModel.paginate({}, opt)
 
-            console.log(UserData)
+
 
             if (!UserData) {
                 return res.status(400).json({ message: "data not found" })

@@ -29,7 +29,6 @@ class AuthController {
             }
 
             if (!check) {
-                console.log(check)
                 return res.status(400).json({ status: false, message: "email invalid", data: dataPayload })
             }
 

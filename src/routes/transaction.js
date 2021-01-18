@@ -7,6 +7,7 @@ const route = Router()
 
 route.route('').get(midleware.validateUser, Transaction.GetMemberByNumberNo)
 route.route('/totalTransaction').get(midleware.validateUser, Transaction.GetTotalTransactionByDate)
+route.route('/memberTransaction').get(midleware.validateUser, Transaction.GetTransactionByMember)
 
 
 export default route
