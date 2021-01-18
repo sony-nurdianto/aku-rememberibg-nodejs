@@ -20,11 +20,6 @@ class TransactionControler {
                     }
                 },
                 {
-                    $project: {
-                        order_id: 1
-                    }
-                },
-                {
                     $group: {
                         _id: "$payment_type",
                         TotalTransactionVitual: {
