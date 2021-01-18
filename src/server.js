@@ -33,6 +33,7 @@ morgan.token('date', function () {
 app.use(bodyParser.json({ limit: '50mb' }))
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
 app.use(express.static(path.join(__dirname, 'assets')))
+app.use(express.static(__dirname + '/member_images'));
 
 
 app.use('/', routes)

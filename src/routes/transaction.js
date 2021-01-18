@@ -8,4 +8,5 @@ const route = Router()
 route.route('').get(midleware.validateUser, Transaction.GetMemberByNumberNo)
 
 
+
 export default route

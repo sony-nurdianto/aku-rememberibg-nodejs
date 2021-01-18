@@ -1,11 +1,42 @@
-// import TransactionModel from "../models/member";
 import Transaction from "../models/transaction";
 import TransactionDetailModel from "../models/transaction-details"
-// import transactionDetails from "../models/transaction-details";
-// import MemberModel from "../models/member";5870002744
+
 
 
 class TransactionControler {
+
+
+    GetTotalTransactionByDate = async (req, res) {
+        const { pStartDate, pEndDate } = req.query;
+        let startDate = JSON.parse(pStartDate);
+        let enDate = JSON.parse(pEndDate);
+        try {
+            const totalTransaction = await Transaction.aggregate([
+                {
+                    $match: {
+                        createdAt: {
+                            $gte: new Date("2020-04-22 11:04:42.711Z"),
+                            $lte: new Date("2021-01-04 11:04:42.711Z")
+                        }
+                    },
+                    $group: {
+                        _id: {
+                            payment_type: "virtual_account"
+                        },
+                        TotalTransactionVitual: {
+                            $sum: "$grand_total"
+                        }
+                    }
+                }
+            ])
+
+            console.log(totalTransaction)
+        } catch (error) {
+            if (error) {
+                return res.status(400).json({ message: "internal Server Error" })
+            }
+        }
+    }
 
     GetMemberTransaction = async (req, res) => {
         const memberId = req.locals.id
@@ -13,7 +44,7 @@ class TransactionControler {
 
             // "5e79bd501a160c1ee89c9dc8" 
 
-            const TransactionDetail = await TransactionDetailModel.findOne({ memberId: "5e79bd501a160c1ee89c9dc8" }).populate('transId').populate('memberId')
+            const TransactionDetail = await TransactionDetailModel.findOne({ memberId: memberId }).populate('transId').populate('memberId')
             if (!TransactionDetail) {
                 return res.status(400).json({ status: false, message: "data not found" })
             }
